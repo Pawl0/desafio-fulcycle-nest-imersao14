@@ -2,7 +2,6 @@ version: '3'
 
 services:
   app:
-    platform: linux/x86_64
     build: .
     depends_on:
       - db
@@ -10,18 +9,11 @@ services:
       - "3000:3000"
 
   db:
-    platform: linux/x86_64
     image: bitnami/mongodb:5.0.17
     ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/bitnami/mongodb
+      - 27017:27017
     environment:
       MONGODB_ROOT_PASSWORD: root
       MONGODB_REPLICA_SET_MODE: primary
       MONGODB_REPLICA_SET_KEY: 123456
       MONGODB_DATABASE: nest
-
-volumes:
-  mongodb_data:
-    driver: local
