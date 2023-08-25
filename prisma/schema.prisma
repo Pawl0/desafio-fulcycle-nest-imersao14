@@ -13,31 +13,20 @@ datasource db {
 model Route {
   id             String      @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  source         Source      @relation(fields: [source_id], references: [id])
-  destination    Destination @relation(fields: [destination_id], references: [id])
-  source_id      String      @unique @db.ObjectId
-  destination_id String      @unique @db.ObjectId
+  source      Location     @relation("RouteSource", fields: [sourceId], references: [id])
+  destination Location     @relation("RouteDestination", fields: [destinationId], references: [id])
+  sourceId      String      @unique @db.ObjectId
+  destinationId String      @unique @db.ObjectId
   created_at     DateTime    @default(now())
   updated_at     DateTime    @updatedAt
-  sourceId       String      @db.ObjectId
 }
 
-model Source {
+model Location {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   lat        Float
   lng        Float
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  Route      Route?
-}
-
-model Destination {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  lat        Float
-  lng        Float
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  Route      Route?
+  routesAsSource      Route[] @relation("RouteSource")
+  routesAsDestination Route[] @relation("RouteDestination")
 }
 
 type Coord {
